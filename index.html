@@ -1,783 +1,623 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="th">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ควิซไทย — ทดสอบความรู้กับ AI</title>
-    <link
-      href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&family=Mitr:wght@300;400;500;600&display=swap"
-      rel="stylesheet"
-    />
-    <style>
-      :root {
-        --bg: #0a0a0f;
-        --surface: #13131a;
-        --surface2: #1c1c27;
-        --border: rgba(255, 255, 255, 0.08);
-        --border-hover: rgba(255, 255, 255, 0.18);
-        --text: #f0f0f5;
-        --muted: #7a7a9a;
-        --accent: #c8a96e;
-        --accent2: #8b6fd4;
-        --correct: #4ade80;
-        --wrong: #f87171;
-        --font-head: "Mitr", sans-serif;
-        --font-body: "Sarabun", sans-serif;
-      }
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ควิซไทย — ทดสอบความรู้กับ AI</title>
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&family=Mitr:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0a0a0f;
+  --surface: #13131a;
+  --surface2: #1c1c27;
+  --border: rgba(255,255,255,0.08);
+  --border-hover: rgba(255,255,255,0.18);
+  --text: #f0f0f5;
+  --muted: #7a7a9a;
+  --accent: #c8a96e;
+  --accent2: #8b6fd4;
+  --correct: #4ade80;
+  --wrong: #f87171;
+  --font-head: 'Mitr', sans-serif;
+  --font-body: 'Sarabun', sans-serif;
+}
 
-      * {
-        box-sizing: border-box;
-        margin: 0;
-        padding: 0;
-      }
+* { box-sizing: border-box; margin: 0; padding: 0; }
 
-      body {
-        background: var(--bg);
-        color: var(--text);
-        font-family: var(--font-body);
-        min-height: 100vh;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        padding: 1.5rem;
-        position: relative;
-        overflow-x: hidden;
-      }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  position: relative;
+  overflow-x: hidden;
+}
 
-      body::before {
-        content: "";
-        position: fixed;
-        top: -40%;
-        left: -20%;
-        width: 80vw;
-        height: 80vw;
-        background: radial-gradient(
-          circle,
-          rgba(139, 111, 212, 0.07) 0%,
-          transparent 60%
-        );
-        pointer-events: none;
-        z-index: 0;
-      }
-      body::after {
-        content: "";
-        position: fixed;
-        bottom: -30%;
-        right: -10%;
-        width: 60vw;
-        height: 60vw;
-        background: radial-gradient(
-          circle,
-          rgba(200, 169, 110, 0.06) 0%,
-          transparent 60%
-        );
-        pointer-events: none;
-        z-index: 0;
-      }
+body::before {
+  content: '';
+  position: fixed;
+  top: -40%;
+  left: -20%;
+  width: 80vw;
+  height: 80vw;
+  background: radial-gradient(circle, rgba(139,111,212,0.07) 0%, transparent 60%);
+  pointer-events: none;
+  z-index: 0;
+}
+body::after {
+  content: '';
+  position: fixed;
+  bottom: -30%;
+  right: -10%;
+  width: 60vw;
+  height: 60vw;
+  background: radial-gradient(circle, rgba(200,169,110,0.06) 0%, transparent 60%);
+  pointer-events: none;
+  z-index: 0;
+}
 
-      .wrap {
-        width: 100%;
-        max-width: 680px;
-        position: relative;
-        z-index: 1;
-      }
+.wrap {
+  width: 100%;
+  max-width: 680px;
+  position: relative;
+  z-index: 1;
+}
 
-      /* ---- SCREENS ---- */
-      .screen {
-        display: none;
-        animation: fadeUp 0.4s ease;
-      }
-      .screen.active {
-        display: block;
-      }
+/* ---- SCREENS ---- */
+.screen { display: none; animation: fadeUp 0.4s ease; }
+.screen.active { display: block; }
 
-      @keyframes fadeUp {
-        from {
-          opacity: 0;
-          transform: translateY(18px);
-        }
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
-      }
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
 
-      /* ---- LOGO / HEADER ---- */
-      .logo {
-        font-family: var(--font-head);
-        font-size: 2.4rem;
-        font-weight: 600;
-        letter-spacing: -0.5px;
-        margin-bottom: 0.25rem;
-      }
-      .logo span {
-        color: var(--accent);
-      }
-      .tagline {
-        color: var(--muted);
-        font-size: 0.95rem;
-        margin-bottom: 2.5rem;
-      }
+/* ---- LOGO / HEADER ---- */
+.logo {
+  font-family: var(--font-head);
+  font-size: 2.4rem;
+  font-weight: 600;
+  letter-spacing: -0.5px;
+  margin-bottom: 0.25rem;
+}
+.logo span { color: var(--accent); }
+.tagline {
+  color: var(--muted);
+  font-size: 0.95rem;
+  margin-bottom: 2.5rem;
+}
 
-      /* ---- CATEGORY GRID ---- */
-      .cat-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-        gap: 12px;
-        margin-bottom: 2rem;
-      }
+/* ---- CATEGORY GRID ---- */
+.cat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 12px;
+  margin-bottom: 2rem;
+}
 
-      .cat-card {
-        background: var(--surface);
-        border: 0.5px solid var(--border);
-        border-radius: 14px;
-        padding: 1.1rem 1rem;
-        cursor: pointer;
-        text-align: center;
-        transition:
-          border-color 0.2s,
-          background 0.2s,
-          transform 0.15s;
-        user-select: none;
-      }
-      .cat-card:hover {
-        border-color: var(--border-hover);
-        background: var(--surface2);
-        transform: translateY(-2px);
-      }
-      .cat-card.selected {
-        border-color: var(--accent);
-        background: rgba(200, 169, 110, 0.08);
-      }
-      .cat-icon {
-        font-size: 1.8rem;
-        margin-bottom: 8px;
-        display: block;
-      }
-      .cat-name {
-        font-family: var(--font-head);
-        font-size: 0.9rem;
-        font-weight: 500;
-        color: var(--text);
-      }
+.cat-card {
+  background: var(--surface);
+  border: 0.5px solid var(--border);
+  border-radius: 14px;
+  padding: 1.1rem 1rem;
+  cursor: pointer;
+  text-align: center;
+  transition: border-color 0.2s, background 0.2s, transform 0.15s;
+  user-select: none;
+}
+.cat-card:hover {
+  border-color: var(--border-hover);
+  background: var(--surface2);
+  transform: translateY(-2px);
+}
+.cat-card.selected {
+  border-color: var(--accent);
+  background: rgba(200,169,110,0.08);
+}
+.cat-icon { font-size: 1.8rem; margin-bottom: 8px; display: block; }
+.cat-name {
+  font-family: var(--font-head);
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--text);
+}
 
-      /* ---- DIFFICULTY ---- */
-      .section-label {
-        font-size: 0.8rem;
-        color: var(--muted);
-        text-transform: uppercase;
-        letter-spacing: 1.5px;
-        margin-bottom: 10px;
-        font-weight: 500;
-      }
-      .diff-row {
-        display: flex;
-        gap: 8px;
-        margin-bottom: 2rem;
-      }
-      .diff-btn {
-        flex: 1;
-        background: var(--surface);
-        border: 0.5px solid var(--border);
-        border-radius: 10px;
-        padding: 0.55rem 0;
-        cursor: pointer;
-        color: var(--muted);
-        font-family: var(--font-body);
-        font-size: 0.9rem;
-        transition: all 0.2s;
-      }
-      .diff-btn:hover {
-        border-color: var(--border-hover);
-        color: var(--text);
-      }
-      .diff-btn.selected {
-        border-color: var(--accent2);
-        color: var(--accent2);
-        background: rgba(139, 111, 212, 0.1);
-      }
+/* ---- DIFFICULTY ---- */
+.section-label {
+  font-size: 0.8rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  margin-bottom: 10px;
+  font-weight: 500;
+}
+.diff-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 2rem;
+}
+.diff-btn {
+  flex: 1;
+  background: var(--surface);
+  border: 0.5px solid var(--border);
+  border-radius: 10px;
+  padding: 0.55rem 0;
+  cursor: pointer;
+  color: var(--muted);
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  transition: all 0.2s;
+}
+.diff-btn:hover { border-color: var(--border-hover); color: var(--text); }
+.diff-btn.selected { border-color: var(--accent2); color: var(--accent2); background: rgba(139,111,212,0.1); }
 
-      /* ---- PRIMARY BUTTON ---- */
-      .btn-primary {
-        width: 100%;
-        background: var(--accent);
-        color: #0a0a0f;
-        border: none;
-        border-radius: 12px;
-        padding: 0.9rem;
-        font-family: var(--font-head);
-        font-size: 1rem;
-        font-weight: 600;
-        cursor: pointer;
-        transition:
-          opacity 0.2s,
-          transform 0.15s;
-      }
-      .btn-primary:hover {
-        opacity: 0.88;
-        transform: translateY(-1px);
-      }
-      .btn-primary:disabled {
-        opacity: 0.35;
-        cursor: not-allowed;
-        transform: none;
-      }
+/* ---- PRIMARY BUTTON ---- */
+.btn-primary {
+  width: 100%;
+  background: var(--accent);
+  color: #0a0a0f;
+  border: none;
+  border-radius: 12px;
+  padding: 0.9rem;
+  font-family: var(--font-head);
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s, transform 0.15s;
+}
+.btn-primary:hover { opacity: 0.88; transform: translateY(-1px); }
+.btn-primary:disabled { opacity: 0.35; cursor: not-allowed; transform: none; }
 
-      /* ---- LOADING SCREEN ---- */
-      #screen-loading {
-        text-align: center;
-        padding: 3rem 0;
-      }
-      .spinner {
-        width: 48px;
-        height: 48px;
-        border: 2px solid var(--border);
-        border-top-color: var(--accent);
-        border-radius: 50%;
-        animation: spin 0.8s linear infinite;
-        margin: 0 auto 1.5rem;
-      }
-      @keyframes spin {
-        to {
-          transform: rotate(360deg);
-        }
-      }
-      .loading-text {
-        color: var(--muted);
-        font-size: 0.9rem;
-      }
+/* ---- LOADING SCREEN ---- */
+#screen-loading { text-align: center; padding: 3rem 0; }
+.spinner {
+  width: 48px;
+  height: 48px;
+  border: 2px solid var(--border);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin: 0 auto 1.5rem;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.loading-text { color: var(--muted); font-size: 0.9rem; }
 
-      /* ---- QUIZ SCREEN ---- */
-      .quiz-header {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        margin-bottom: 1.25rem;
-      }
-      .progress-text {
-        font-size: 0.85rem;
-        color: var(--muted);
-        font-weight: 500;
-      }
-      .timer-badge {
-        font-family: var(--font-head);
-        font-size: 1rem;
-        font-weight: 600;
-        color: var(--accent);
-        background: rgba(200, 169, 110, 0.1);
-        border: 0.5px solid rgba(200, 169, 110, 0.25);
-        border-radius: 8px;
-        padding: 4px 12px;
-        min-width: 52px;
-        text-align: center;
-        transition:
-          color 0.3s,
-          background 0.3s;
-      }
-      .timer-badge.danger {
-        color: var(--wrong);
-        background: rgba(248, 113, 113, 0.1);
-        border-color: rgba(248, 113, 113, 0.25);
-      }
+/* ---- QUIZ SCREEN ---- */
+.quiz-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.25rem;
+}
+.progress-text {
+  font-size: 0.85rem;
+  color: var(--muted);
+  font-weight: 500;
+}
+.timer-badge {
+  font-family: var(--font-head);
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--accent);
+  background: rgba(200,169,110,0.1);
+  border: 0.5px solid rgba(200,169,110,0.25);
+  border-radius: 8px;
+  padding: 4px 12px;
+  min-width: 52px;
+  text-align: center;
+  transition: color 0.3s, background 0.3s;
+}
+.timer-badge.danger { color: var(--wrong); background: rgba(248,113,113,0.1); border-color: rgba(248,113,113,0.25); }
 
-      .progress-bar-wrap {
-        height: 3px;
-        background: var(--surface2);
-        border-radius: 2px;
-        margin-bottom: 1.5rem;
-        overflow: hidden;
-      }
-      .progress-bar-fill {
-        height: 100%;
-        background: var(--accent);
-        border-radius: 2px;
-        transition: width 0.4s ease;
-      }
+.progress-bar-wrap {
+  height: 3px;
+  background: var(--surface2);
+  border-radius: 2px;
+  margin-bottom: 1.5rem;
+  overflow: hidden;
+}
+.progress-bar-fill {
+  height: 100%;
+  background: var(--accent);
+  border-radius: 2px;
+  transition: width 0.4s ease;
+}
 
-      .question-card {
-        background: var(--surface);
-        border: 0.5px solid var(--border);
-        border-radius: 18px;
-        padding: 1.75rem 1.5rem;
-        margin-bottom: 1rem;
-      }
-      .question-num {
-        font-size: 0.78rem;
-        color: var(--accent);
-        font-weight: 600;
-        letter-spacing: 1px;
-        margin-bottom: 10px;
-      }
-      .question-text {
-        font-size: 1.15rem;
-        line-height: 1.7;
-        font-weight: 400;
-        color: var(--text);
-      }
+.question-card {
+  background: var(--surface);
+  border: 0.5px solid var(--border);
+  border-radius: 18px;
+  padding: 1.75rem 1.5rem;
+  margin-bottom: 1rem;
+}
+.question-num {
+  font-size: 0.78rem;
+  color: var(--accent);
+  font-weight: 600;
+  letter-spacing: 1px;
+  margin-bottom: 10px;
+}
+.question-text {
+  font-size: 1.15rem;
+  line-height: 1.7;
+  font-weight: 400;
+  color: var(--text);
+}
 
-      .choices {
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-        margin-bottom: 1rem;
-      }
+.choices { display: flex; flex-direction: column; gap: 10px; margin-bottom: 1rem; }
 
-      .choice-btn {
-        background: var(--surface);
-        border: 0.5px solid var(--border);
-        border-radius: 12px;
-        padding: 0.9rem 1.1rem;
-        text-align: left;
-        cursor: pointer;
-        font-family: var(--font-body);
-        font-size: 0.95rem;
-        color: var(--text);
-        transition:
-          border-color 0.18s,
-          background 0.18s,
-          transform 0.12s;
-        display: flex;
-        align-items: center;
-        gap: 12px;
-      }
-      .choice-btn:hover:not(:disabled) {
-        border-color: var(--border-hover);
-        background: var(--surface2);
-        transform: translateX(3px);
-      }
-      .choice-btn:disabled {
-        cursor: default;
-        transform: none;
-      }
-      .choice-btn.correct {
-        border-color: var(--correct);
-        background: rgba(74, 222, 128, 0.08);
-        color: var(--correct);
-      }
-      .choice-btn.wrong {
-        border-color: var(--wrong);
-        background: rgba(248, 113, 113, 0.08);
-        color: var(--wrong);
-      }
-      .choice-letter {
-        width: 26px;
-        height: 26px;
-        border-radius: 6px;
-        background: var(--surface2);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 0.78rem;
-        font-weight: 600;
-        font-family: var(--font-head);
-        flex-shrink: 0;
-        transition: background 0.18s;
-      }
-      .choice-btn.correct .choice-letter {
-        background: rgba(74, 222, 128, 0.2);
-      }
-      .choice-btn.wrong .choice-letter {
-        background: rgba(248, 113, 113, 0.2);
-      }
+.choice-btn {
+  background: var(--surface);
+  border: 0.5px solid var(--border);
+  border-radius: 12px;
+  padding: 0.9rem 1.1rem;
+  text-align: left;
+  cursor: pointer;
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  color: var(--text);
+  transition: border-color 0.18s, background 0.18s, transform 0.12s;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.choice-btn:hover:not(:disabled) {
+  border-color: var(--border-hover);
+  background: var(--surface2);
+  transform: translateX(3px);
+}
+.choice-btn:disabled { cursor: default; transform: none; }
+.choice-btn.correct {
+  border-color: var(--correct);
+  background: rgba(74,222,128,0.08);
+  color: var(--correct);
+}
+.choice-btn.wrong {
+  border-color: var(--wrong);
+  background: rgba(248,113,113,0.08);
+  color: var(--wrong);
+}
+.choice-letter {
+  width: 26px;
+  height: 26px;
+  border-radius: 6px;
+  background: var(--surface2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.78rem;
+  font-weight: 600;
+  font-family: var(--font-head);
+  flex-shrink: 0;
+  transition: background 0.18s;
+}
+.choice-btn.correct .choice-letter { background: rgba(74,222,128,0.2); }
+.choice-btn.wrong .choice-letter { background: rgba(248,113,113,0.2); }
 
-      /* ---- EXPLANATION ---- */
-      .explanation-box {
-        background: var(--surface2);
-        border: 0.5px solid var(--border);
-        border-left: 3px solid var(--accent2);
-        border-radius: 12px;
-        padding: 1rem 1.1rem;
-        margin-bottom: 1rem;
-        animation: fadeUp 0.35s ease;
-      }
-      .explanation-box.hidden {
-        display: none;
-      }
-      .explanation-label {
-        font-size: 0.75rem;
-        color: var(--accent2);
-        font-weight: 600;
-        letter-spacing: 1px;
-        margin-bottom: 6px;
-      }
-      .explanation-text {
-        font-size: 0.88rem;
-        line-height: 1.7;
-        color: var(--text);
-      }
+/* ---- EXPLANATION ---- */
+.explanation-box {
+  background: var(--surface2);
+  border: 0.5px solid var(--border);
+  border-left: 3px solid var(--accent2);
+  border-radius: 12px;
+  padding: 1rem 1.1rem;
+  margin-bottom: 1rem;
+  animation: fadeUp 0.35s ease;
+}
+.explanation-box.hidden { display: none; }
+.explanation-label {
+  font-size: 0.75rem;
+  color: var(--accent2);
+  font-weight: 600;
+  letter-spacing: 1px;
+  margin-bottom: 6px;
+}
+.explanation-text {
+  font-size: 0.88rem;
+  line-height: 1.7;
+  color: var(--text);
+}
 
-      .next-btn {
-        width: 100%;
-        background: var(--surface);
-        border: 0.5px solid var(--border-hover);
-        border-radius: 12px;
-        padding: 0.8rem;
-        font-family: var(--font-head);
-        font-size: 0.95rem;
-        font-weight: 500;
-        color: var(--text);
-        cursor: pointer;
-        transition: all 0.2s;
-        display: none;
-      }
-      .next-btn:hover {
-        background: var(--surface2);
-        border-color: var(--accent);
-        color: var(--accent);
-      }
-      .next-btn.visible {
-        display: block;
-      }
+.next-btn {
+  width: 100%;
+  background: var(--surface);
+  border: 0.5px solid var(--border-hover);
+  border-radius: 12px;
+  padding: 0.8rem;
+  font-family: var(--font-head);
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--text);
+  cursor: pointer;
+  transition: all 0.2s;
+  display: none;
+}
+.next-btn:hover { background: var(--surface2); border-color: var(--accent); color: var(--accent); }
+.next-btn.visible { display: block; }
 
-      /* ---- RESULT SCREEN ---- */
-      #screen-result {
-        text-align: center;
-      }
-      .result-circle {
-        width: 110px;
-        height: 110px;
-        border-radius: 50%;
-        border: 2px solid var(--accent);
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        margin: 0 auto 1.5rem;
-        position: relative;
-      }
-      .result-score {
-        font-family: var(--font-head);
-        font-size: 2.2rem;
-        font-weight: 600;
-        color: var(--accent);
-        line-height: 1;
-      }
-      .result-total {
-        font-size: 0.8rem;
-        color: var(--muted);
-      }
-      .result-title {
-        font-family: var(--font-head);
-        font-size: 1.5rem;
-        font-weight: 600;
-        margin-bottom: 0.5rem;
-      }
-      .result-sub {
-        color: var(--muted);
-        font-size: 0.9rem;
-        margin-bottom: 2rem;
-      }
+/* ---- RESULT SCREEN ---- */
+#screen-result { text-align: center; }
+.result-circle {
+  width: 110px;
+  height: 110px;
+  border-radius: 50%;
+  border: 2px solid var(--accent);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1.5rem;
+  position: relative;
+}
+.result-score {
+  font-family: var(--font-head);
+  font-size: 2.2rem;
+  font-weight: 600;
+  color: var(--accent);
+  line-height: 1;
+}
+.result-total { font-size: 0.8rem; color: var(--muted); }
+.result-title {
+  font-family: var(--font-head);
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+.result-sub { color: var(--muted); font-size: 0.9rem; margin-bottom: 2rem; }
 
-      .result-grid {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 10px;
-        margin-bottom: 2rem;
-      }
-      .result-stat {
-        background: var(--surface);
-        border: 0.5px solid var(--border);
-        border-radius: 12px;
-        padding: 1rem;
-      }
-      .result-stat-num {
-        font-family: var(--font-head);
-        font-size: 1.4rem;
-        font-weight: 600;
-        margin-bottom: 2px;
-      }
-      .result-stat-label {
-        font-size: 0.8rem;
-        color: var(--muted);
-      }
+.result-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 2rem;
+}
+.result-stat {
+  background: var(--surface);
+  border: 0.5px solid var(--border);
+  border-radius: 12px;
+  padding: 1rem;
+}
+.result-stat-num {
+  font-family: var(--font-head);
+  font-size: 1.4rem;
+  font-weight: 600;
+  margin-bottom: 2px;
+}
+.result-stat-label { font-size: 0.8rem; color: var(--muted); }
 
-      .btn-secondary {
-        width: 100%;
-        background: transparent;
-        border: 0.5px solid var(--border-hover);
-        border-radius: 12px;
-        padding: 0.8rem;
-        font-family: var(--font-head);
-        font-size: 0.95rem;
-        font-weight: 500;
-        color: var(--text);
-        cursor: pointer;
-        margin-top: 10px;
-        transition: all 0.2s;
-      }
-      .btn-secondary:hover {
-        border-color: var(--accent2);
-        color: var(--accent2);
-      }
+.btn-secondary {
+  width: 100%;
+  background: transparent;
+  border: 0.5px solid var(--border-hover);
+  border-radius: 12px;
+  padding: 0.8rem;
+  font-family: var(--font-head);
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--text);
+  cursor: pointer;
+  margin-top: 10px;
+  transition: all 0.2s;
+}
+.btn-secondary:hover { border-color: var(--accent2); color: var(--accent2); }
 
-      /* ---- ERROR BOX ---- */
-      .error-box {
-        background: rgba(248, 113, 113, 0.08);
-        border: 0.5px solid rgba(248, 113, 113, 0.3);
-        border-radius: 12px;
-        padding: 1rem 1.2rem;
-        color: var(--wrong);
-        font-size: 0.88rem;
-        margin-top: 1rem;
-        display: none;
-      }
+/* ---- ERROR BOX ---- */
+.error-box {
+  background: rgba(248,113,113,0.08);
+  border: 0.5px solid rgba(248,113,113,0.3);
+  border-radius: 12px;
+  padding: 1rem 1.2rem;
+  color: var(--wrong);
+  font-size: 0.88rem;
+  margin-top: 1rem;
+  display: none;
+}
 
-      /* ---- API KEY BANNER ---- */
-      .api-banner {
-        background: rgba(200, 169, 110, 0.06);
-        border: 0.5px solid rgba(200, 169, 110, 0.2);
-        border-radius: 12px;
-        padding: 1rem 1.2rem;
-        margin-bottom: 1.5rem;
-        display: flex;
-        align-items: flex-start;
-        gap: 10px;
-      }
-      .api-banner-icon {
-        font-size: 1.1rem;
-        flex-shrink: 0;
-        margin-top: 1px;
-      }
-      .api-banner-text {
-        font-size: 0.82rem;
-        color: var(--muted);
-        line-height: 1.6;
-      }
-      .api-banner-text strong {
-        color: var(--accent);
-      }
-      .api-key-input {
-        width: 100%;
-        background: var(--surface2);
-        border: 0.5px solid var(--border);
-        border-radius: 10px;
-        padding: 0.65rem 1rem;
-        color: var(--text);
-        font-family: var(--font-body);
-        font-size: 0.85rem;
-        margin-top: 8px;
-        outline: none;
-        transition: border-color 0.2s;
-      }
-      .api-key-input:focus {
-        border-color: var(--accent);
-      }
-      .api-key-input::placeholder {
-        color: var(--muted);
-      }
-    </style>
-  </head>
-  <body>
-    <div class="wrap">
-      <!-- SCREEN: HOME -->
-      <div id="screen-home" class="screen active">
-        <div class="logo">ควิซ<span>ไทย</span> 🇹🇭</div>
-        <p class="tagline">ทดสอบความรู้กับ AI — ออกข้อสอบใหม่ทุกครั้ง</p>
+/* ---- API KEY BANNER ---- */
+.api-banner {
+  background: rgba(200,169,110,0.06);
+  border: 0.5px solid rgba(200,169,110,0.2);
+  border-radius: 12px;
+  padding: 1rem 1.2rem;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+.api-banner-icon { font-size: 1.1rem; flex-shrink: 0; margin-top: 1px; }
+.api-banner-text { font-size: 0.82rem; color: var(--muted); line-height: 1.6; }
+.api-banner-text strong { color: var(--accent); }
+.api-key-input {
+  width: 100%;
+  background: var(--surface2);
+  border: 0.5px solid var(--border);
+  border-radius: 10px;
+  padding: 0.65rem 1rem;
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  margin-top: 8px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.api-key-input:focus { border-color: var(--accent); }
+.api-key-input::placeholder { color: var(--muted); }
+</style>
+</head>
+<body>
+<div class="wrap">
 
-        <div class="api-banner">
-          <span class="api-banner-icon">🔑</span>
-          <div class="api-banner-text">
-            <strong>ใส่ Anthropic API Key</strong> เพื่อให้ AI ออกคำถามได้<br />
-            Key ไม่ถูกเก็บในเซิร์ฟเวอร์ใดๆ ใช้แค่ใน browser ของคุณ
-            <input
-              class="api-key-input"
-              id="api-key-input"
-              type="password"
-              placeholder="sk-ant-..."
-            />
-          </div>
-        </div>
+  <!-- SCREEN: HOME -->
+  <div id="screen-home" class="screen active">
+    <div class="logo">ควิซ<span>ไทย</span> 🇹🇭</div>
+    <p class="tagline">ทดสอบความรู้กับ AI — ออกข้อสอบใหม่ทุกครั้ง</p>
 
-        <p class="section-label">เลือกหมวดหมู่</p>
-        <div class="cat-grid" id="cat-grid"></div>
-
-        <p class="section-label">ระดับความยาก</p>
-        <div class="diff-row" id="diff-row">
-          <button class="diff-btn selected" data-diff="ง่าย">ง่าย</button>
-          <button class="diff-btn" data-diff="ปานกลาง">ปานกลาง</button>
-          <button class="diff-btn" data-diff="ยาก">ยาก</button>
-        </div>
-
-        <button class="btn-primary" id="start-btn" disabled>เริ่มเล่น →</button>
-        <div class="error-box" id="home-error"></div>
-      </div>
-
-      <!-- SCREEN: LOADING -->
-      <div id="screen-loading" class="screen">
-        <div class="spinner"></div>
-        <p class="loading-text">AI กำลังออกข้อสอบให้คุณ...</p>
-      </div>
-
-      <!-- SCREEN: QUIZ -->
-      <div id="screen-quiz" class="screen">
-        <div class="quiz-header">
-          <span class="progress-text" id="progress-text">ข้อ 1 / 10</span>
-          <span class="timer-badge" id="timer-badge">30</span>
-        </div>
-        <div class="progress-bar-wrap">
-          <div
-            class="progress-bar-fill"
-            id="progress-bar"
-            style="width: 0%"
-          ></div>
-        </div>
-
-        <div class="question-card">
-          <p class="question-num" id="question-num">คำถามที่ 1</p>
-          <p class="question-text" id="question-text"></p>
-        </div>
-
-        <div class="choices" id="choices"></div>
-
-        <div class="explanation-box hidden" id="explanation-box">
-          <p class="explanation-label">📖 คำอธิบาย</p>
-          <p class="explanation-text" id="explanation-text"></p>
-        </div>
-
-        <button class="next-btn" id="next-btn">ข้อถัดไป →</button>
-      </div>
-
-      <!-- SCREEN: RESULT -->
-      <div id="screen-result" class="screen">
-        <div class="result-circle">
-          <span class="result-score" id="result-score">0</span>
-          <span class="result-total" id="result-total">/10</span>
-        </div>
-        <h2 class="result-title" id="result-title">เยี่ยมมาก!</h2>
-        <p class="result-sub" id="result-sub">คุณตอบถูก 8 จาก 10 ข้อ</p>
-
-        <div class="result-grid">
-          <div class="result-stat">
-            <div
-              class="result-stat-num"
-              id="r-correct"
-              style="color: var(--correct)"
-            >
-              0
-            </div>
-            <div class="result-stat-label">ตอบถูก</div>
-          </div>
-          <div class="result-stat">
-            <div
-              class="result-stat-num"
-              id="r-wrong"
-              style="color: var(--wrong)"
-            >
-              0
-            </div>
-            <div class="result-stat-label">ตอบผิด</div>
-          </div>
-          <div class="result-stat">
-            <div
-              class="result-stat-num"
-              id="r-time"
-              style="color: var(--accent)"
-            >
-              0s
-            </div>
-            <div class="result-stat-label">เวลาเฉลี่ย/ข้อ</div>
-          </div>
-          <div class="result-stat">
-            <div
-              class="result-stat-num"
-              id="r-pct"
-              style="color: var(--accent2)"
-            >
-              0%
-            </div>
-            <div class="result-stat-label">คะแนนรวม</div>
-          </div>
-        </div>
-
-        <button class="btn-primary" id="retry-same-btn">
-          เล่นซ้ำหมวดเดิม →
-        </button>
-        <button class="btn-secondary" id="retry-new-btn">กลับหน้าหลัก</button>
+    <div class="api-banner">
+      <span class="api-banner-icon">🔑</span>
+      <div class="api-banner-text">
+        <strong>ใส่ Google Gemini API Key</strong> เพื่อให้ AI ออกคำถามได้ (ฟรี 1,500 req/วัน)<br>
+        สมัครได้ที่ <a href="https://aistudio.google.com/apikey" target="_blank" style="color:var(--accent);">aistudio.google.com</a> · Key ใช้แค่ใน browser ของคุณ ไม่ถูกเก็บที่ไหน
+        <input class="api-key-input" id="api-key-input" type="password" placeholder="AIza..." />
       </div>
     </div>
 
-    <script>
-      const CATEGORIES = [
-        { id: "history", name: "ประวัติศาสตร์ไทย", icon: "🏯" },
-        { id: "science", name: "วิทยาศาสตร์", icon: "🔬" },
-        { id: "culture", name: "วัฒนธรรมไทย", icon: "🎭" },
-        { id: "geo", name: "ภูมิศาสตร์", icon: "🗺️" },
-        { id: "sport", name: "กีฬา", icon: "⚽" },
-        { id: "tech", name: "เทคโนโลยี", icon: "💻" },
-        { id: "food", name: "อาหารไทย", icon: "🍜" },
-        { id: "general", name: "ความรู้ทั่วไป", icon: "🧠" },
-      ];
+    <p class="section-label">เลือกหมวดหมู่</p>
+    <div class="cat-grid" id="cat-grid"></div>
 
-      const TIMER_DEFAULT = 30;
-      let selectedCat = null;
-      let selectedDiff = "ง่าย";
-      let questions = [];
-      let currentQ = 0;
-      let score = 0;
-      let wrongCount = 0;
-      let timerInterval = null;
-      let timerLeft = TIMER_DEFAULT;
-      let totalTime = 0;
-      let questionStartTime = 0;
+    <p class="section-label">ระดับความยาก</p>
+    <div class="diff-row" id="diff-row">
+      <button class="diff-btn selected" data-diff="ง่าย">ง่าย</button>
+      <button class="diff-btn" data-diff="ปานกลาง">ปานกลาง</button>
+      <button class="diff-btn" data-diff="ยาก">ยาก</button>
+    </div>
 
-      // --- BUILD HOME ---
-      const catGrid = document.getElementById("cat-grid");
-      CATEGORIES.forEach((c) => {
-        const el = document.createElement("div");
-        el.className = "cat-card";
-        el.innerHTML = `<span class="cat-icon">${c.icon}</span><span class="cat-name">${c.name}</span>`;
-        el.addEventListener("click", () => {
-          document
-            .querySelectorAll(".cat-card")
-            .forEach((x) => x.classList.remove("selected"));
-          el.classList.add("selected");
-          selectedCat = c;
-          updateStartBtn();
-        });
-        catGrid.appendChild(el);
-      });
+    <button class="btn-primary" id="start-btn" disabled>เริ่มเล่น →</button>
+    <div class="error-box" id="home-error"></div>
+  </div>
 
-      document.querySelectorAll(".diff-btn").forEach((btn) => {
-        btn.addEventListener("click", () => {
-          document
-            .querySelectorAll(".diff-btn")
-            .forEach((x) => x.classList.remove("selected"));
-          btn.classList.add("selected");
-          selectedDiff = btn.dataset.diff;
-        });
-      });
+  <!-- SCREEN: LOADING -->
+  <div id="screen-loading" class="screen">
+    <div class="spinner"></div>
+    <p class="loading-text">AI กำลังออกข้อสอบให้คุณ...</p>
+  </div>
 
-      const apiInput = document.getElementById("api-key-input");
-      apiInput.addEventListener("input", updateStartBtn);
+  <!-- SCREEN: QUIZ -->
+  <div id="screen-quiz" class="screen">
+    <div class="quiz-header">
+      <span class="progress-text" id="progress-text">ข้อ 1 / 10</span>
+      <span class="timer-badge" id="timer-badge">30</span>
+    </div>
+    <div class="progress-bar-wrap">
+      <div class="progress-bar-fill" id="progress-bar" style="width:0%"></div>
+    </div>
 
-      function updateStartBtn() {
-        const key = apiInput.value.trim();
-        document.getElementById("start-btn").disabled = !(
-          selectedCat && key.startsWith("sk-")
-        );
-      }
+    <div class="question-card">
+      <p class="question-num" id="question-num">คำถามที่ 1</p>
+      <p class="question-text" id="question-text"></p>
+    </div>
 
-      document.getElementById("start-btn").addEventListener("click", startGame);
+    <div class="choices" id="choices"></div>
 
-      // --- SCREEN SWITCH ---
-      function showScreen(id) {
-        document
-          .querySelectorAll(".screen")
-          .forEach((s) => s.classList.remove("active"));
-        document.getElementById(id).classList.add("active");
-      }
+    <div class="explanation-box hidden" id="explanation-box">
+      <p class="explanation-label">📖 คำอธิบาย</p>
+      <p class="explanation-text" id="explanation-text"></p>
+    </div>
 
-      // --- START GAME ---
-      async function startGame() {
-        const apiKey = apiInput.value.trim();
-        showScreen("screen-loading");
-        const err = document.getElementById("home-error");
-        err.style.display = "none";
+    <button class="next-btn" id="next-btn">ข้อถัดไป →</button>
+  </div>
 
-        const prompt = `คุณคือผู้ออกข้อสอบมืออาชีพภาษาไทย
+  <!-- SCREEN: RESULT -->
+  <div id="screen-result" class="screen">
+    <div class="result-circle">
+      <span class="result-score" id="result-score">0</span>
+      <span class="result-total" id="result-total">/10</span>
+    </div>
+    <h2 class="result-title" id="result-title">เยี่ยมมาก!</h2>
+    <p class="result-sub" id="result-sub">คุณตอบถูก 8 จาก 10 ข้อ</p>
 
-สร้างข้อสอบ ${selectedDiff === "ง่าย" ? "10" : selectedDiff === "ปานกลาง" ? "10" : "10"} ข้อ
+    <div class="result-grid">
+      <div class="result-stat">
+        <div class="result-stat-num" id="r-correct" style="color: var(--correct)">0</div>
+        <div class="result-stat-label">ตอบถูก</div>
+      </div>
+      <div class="result-stat">
+        <div class="result-stat-num" id="r-wrong" style="color: var(--wrong)">0</div>
+        <div class="result-stat-label">ตอบผิด</div>
+      </div>
+      <div class="result-stat">
+        <div class="result-stat-num" id="r-time" style="color: var(--accent)">0s</div>
+        <div class="result-stat-label">เวลาเฉลี่ย/ข้อ</div>
+      </div>
+      <div class="result-stat">
+        <div class="result-stat-num" id="r-pct" style="color: var(--accent2)">0%</div>
+        <div class="result-stat-label">คะแนนรวม</div>
+      </div>
+    </div>
+
+    <button class="btn-primary" id="retry-same-btn">เล่นซ้ำหมวดเดิม →</button>
+    <button class="btn-secondary" id="retry-new-btn">กลับหน้าหลัก</button>
+  </div>
+
+</div>
+
+<script>
+const CATEGORIES = [
+  { id:'history',   name:'ประวัติศาสตร์ไทย', icon:'🏯' },
+  { id:'science',   name:'วิทยาศาสตร์',       icon:'🔬' },
+  { id:'culture',   name:'วัฒนธรรมไทย',       icon:'🎭' },
+  { id:'geo',       name:'ภูมิศาสตร์',         icon:'🗺️' },
+  { id:'sport',     name:'กีฬา',               icon:'⚽' },
+  { id:'tech',      name:'เทคโนโลยี',          icon:'💻' },
+  { id:'food',      name:'อาหารไทย',           icon:'🍜' },
+  { id:'general',   name:'ความรู้ทั่วไป',       icon:'🧠' },
+];
+
+const TIMER_DEFAULT = 30;
+let selectedCat = null;
+let selectedDiff = 'ง่าย';
+let questions = [];
+let currentQ = 0;
+let score = 0;
+let wrongCount = 0;
+let timerInterval = null;
+let timerLeft = TIMER_DEFAULT;
+let totalTime = 0;
+let questionStartTime = 0;
+
+// --- BUILD HOME ---
+const catGrid = document.getElementById('cat-grid');
+CATEGORIES.forEach(c => {
+  const el = document.createElement('div');
+  el.className = 'cat-card';
+  el.innerHTML = `<span class="cat-icon">${c.icon}</span><span class="cat-name">${c.name}</span>`;
+  el.addEventListener('click', () => {
+    document.querySelectorAll('.cat-card').forEach(x => x.classList.remove('selected'));
+    el.classList.add('selected');
+    selectedCat = c;
+    updateStartBtn();
+  });
+  catGrid.appendChild(el);
+});
+
+document.querySelectorAll('.diff-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.diff-btn').forEach(x => x.classList.remove('selected'));
+    btn.classList.add('selected');
+    selectedDiff = btn.dataset.diff;
+  });
+});
+
+const apiInput = document.getElementById('api-key-input');
+apiInput.addEventListener('input', updateStartBtn);
+
+function updateStartBtn() {
+  const key = apiInput.value.trim();
+  document.getElementById('start-btn').disabled = !(selectedCat && key.startsWith('AIza'));
+}
+
+document.getElementById('start-btn').addEventListener('click', startGame);
+
+// --- SCREEN SWITCH ---
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+// --- START GAME ---
+async function startGame() {
+  const apiKey = apiInput.value.trim();
+  showScreen('screen-loading');
+  const err = document.getElementById('home-error');
+  err.style.display = 'none';
+
+  const prompt = `คุณคือผู้ออกข้อสอบมืออาชีพภาษาไทย
+
+สร้างข้อสอบ ${selectedDiff === 'ง่าย' ? '10' : selectedDiff === 'ปานกลาง' ? '10' : '10'} ข้อ
 หมวด: ${selectedCat.name}
 ระดับ: ${selectedDiff}
 
@@ -799,203 +639,178 @@
 - ภาษาไทยทั้งหมด
 - ไม่ต้องมีคำอื่นนอกจาก JSON`;
 
-        try {
-          const res = await fetch("https://api.anthropic.com/v1/messages", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              "x-api-key": apiKey,
-              "anthropic-version": "2023-06-01",
-              "anthropic-dangerous-direct-browser-access": "true",
-            },
-            body: JSON.stringify({
-              model: "claude-sonnet-4-20250514",
-              max_tokens: 3000,
-              messages: [{ role: "user", content: prompt }],
-            }),
-          });
+  try {
+    const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        contents: [{ parts: [{ text: prompt }] }],
+        generationConfig: { temperature: 0.9, maxOutputTokens: 3000 }
+      })
+    });
 
-          if (!res.ok) {
-            const j = await res.json().catch(() => ({}));
-            throw new Error(j.error?.message || `HTTP ${res.status}`);
-          }
+    if (!res.ok) {
+      const j = await res.json().catch(() => ({}));
+      throw new Error(j.error?.message || `HTTP ${res.status}`);
+    }
 
-          const data = await res.json();
-          const raw = data.content[0].text.trim();
-          const jsonStart = raw.indexOf("{");
-          const jsonEnd = raw.lastIndexOf("}");
-          const parsed = JSON.parse(raw.slice(jsonStart, jsonEnd + 1));
-          questions = parsed.questions;
-          currentQ = 0;
-          score = 0;
-          wrongCount = 0;
-          totalTime = 0;
-          renderQuestion();
-          showScreen("screen-quiz");
-        } catch (e) {
-          showScreen("screen-home");
-          err.textContent = "❌ เกิดข้อผิดพลาด: " + e.message;
-          err.style.display = "block";
-        }
-      }
+    const data = await res.json();
+    const raw = data.candidates[0].content.parts[0].text.trim();
+    const jsonStart = raw.indexOf('{');
+    const jsonEnd = raw.lastIndexOf('}');
+    const parsed = JSON.parse(raw.slice(jsonStart, jsonEnd + 1));
+    questions = parsed.questions;
+    currentQ = 0;
+    score = 0;
+    wrongCount = 0;
+    totalTime = 0;
+    renderQuestion();
+    showScreen('screen-quiz');
+  } catch(e) {
+    showScreen('screen-home');
+    err.textContent = '❌ เกิดข้อผิดพลาด: ' + e.message;
+    err.style.display = 'block';
+  }
+}
 
-      // --- RENDER QUESTION ---
-      function renderQuestion() {
-        const q = questions[currentQ];
-        const total = questions.length;
+// --- RENDER QUESTION ---
+function renderQuestion() {
+  const q = questions[currentQ];
+  const total = questions.length;
 
-        document.getElementById("progress-text").textContent =
-          `ข้อ ${currentQ + 1} / ${total}`;
-        document.getElementById("question-num").textContent =
-          `คำถามที่ ${currentQ + 1}`;
-        document.getElementById("question-text").textContent = q.q;
-        document.getElementById("progress-bar").style.width =
-          `${(currentQ / total) * 100}%`;
+  document.getElementById('progress-text').textContent = `ข้อ ${currentQ + 1} / ${total}`;
+  document.getElementById('question-num').textContent = `คำถามที่ ${currentQ + 1}`;
+  document.getElementById('question-text').textContent = q.q;
+  document.getElementById('progress-bar').style.width = `${(currentQ / total) * 100}%`;
 
-        const expBox = document.getElementById("explanation-box");
-        expBox.classList.add("hidden");
-        document.getElementById("next-btn").classList.remove("visible");
+  const expBox = document.getElementById('explanation-box');
+  expBox.classList.add('hidden');
+  document.getElementById('next-btn').classList.remove('visible');
 
-        const choicesEl = document.getElementById("choices");
-        choicesEl.innerHTML = "";
-        const letters = ["ก", "ข", "ค", "ง"];
-        q.choices.forEach((choice, i) => {
-          const btn = document.createElement("button");
-          btn.className = "choice-btn";
-          btn.innerHTML = `<span class="choice-letter">${letters[i]}</span>${choice}`;
-          btn.addEventListener("click", () => handleAnswer(i, btn));
-          choicesEl.appendChild(btn);
-        });
+  const choicesEl = document.getElementById('choices');
+  choicesEl.innerHTML = '';
+  const letters = ['ก', 'ข', 'ค', 'ง'];
+  q.choices.forEach((choice, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'choice-btn';
+    btn.innerHTML = `<span class="choice-letter">${letters[i]}</span>${choice}`;
+    btn.addEventListener('click', () => handleAnswer(i, btn));
+    choicesEl.appendChild(btn);
+  });
 
-        startTimer();
-        questionStartTime = Date.now();
-      }
+  startTimer();
+  questionStartTime = Date.now();
+}
 
-      // --- TIMER ---
-      function startTimer() {
-        clearInterval(timerInterval);
-        timerLeft = TIMER_DEFAULT;
-        const badge = document.getElementById("timer-badge");
-        badge.textContent = timerLeft;
-        badge.classList.remove("danger");
+// --- TIMER ---
+function startTimer() {
+  clearInterval(timerInterval);
+  timerLeft = TIMER_DEFAULT;
+  const badge = document.getElementById('timer-badge');
+  badge.textContent = timerLeft;
+  badge.classList.remove('danger');
 
-        timerInterval = setInterval(() => {
-          timerLeft--;
-          badge.textContent = timerLeft;
-          if (timerLeft <= 10) badge.classList.add("danger");
-          if (timerLeft <= 0) {
-            clearInterval(timerInterval);
-            timeUp();
-          }
-        }, 1000);
-      }
+  timerInterval = setInterval(() => {
+    timerLeft--;
+    badge.textContent = timerLeft;
+    if (timerLeft <= 10) badge.classList.add('danger');
+    if (timerLeft <= 0) {
+      clearInterval(timerInterval);
+      timeUp();
+    }
+  }, 1000);
+}
 
-      function timeUp() {
-        const q = questions[currentQ];
-        const btns = document.querySelectorAll(".choice-btn");
-        btns.forEach((btn, i) => {
-          btn.disabled = true;
-          if (i === q.answer) btn.classList.add("correct");
-        });
-        wrongCount++;
-        totalTime += TIMER_DEFAULT;
-        showExplanation(q.explanation);
-      }
+function timeUp() {
+  const q = questions[currentQ];
+  const btns = document.querySelectorAll('.choice-btn');
+  btns.forEach((btn, i) => {
+    btn.disabled = true;
+    if (i === q.answer) btn.classList.add('correct');
+  });
+  wrongCount++;
+  totalTime += TIMER_DEFAULT;
+  showExplanation(q.explanation);
+}
 
-      // --- HANDLE ANSWER ---
-      function handleAnswer(idx, btn) {
-        clearInterval(timerInterval);
-        const elapsed = Math.round((Date.now() - questionStartTime) / 1000);
-        totalTime += elapsed;
+// --- HANDLE ANSWER ---
+function handleAnswer(idx, btn) {
+  clearInterval(timerInterval);
+  const elapsed = Math.round((Date.now() - questionStartTime) / 1000);
+  totalTime += elapsed;
 
-        const q = questions[currentQ];
-        const btns = document.querySelectorAll(".choice-btn");
-        btns.forEach((b) => (b.disabled = true));
+  const q = questions[currentQ];
+  const btns = document.querySelectorAll('.choice-btn');
+  btns.forEach(b => b.disabled = true);
 
-        if (idx === q.answer) {
-          btn.classList.add("correct");
-          score++;
-        } else {
-          btn.classList.add("wrong");
-          btns[q.answer].classList.add("correct");
-          wrongCount++;
-        }
+  if (idx === q.answer) {
+    btn.classList.add('correct');
+    score++;
+  } else {
+    btn.classList.add('wrong');
+    btns[q.answer].classList.add('correct');
+    wrongCount++;
+  }
 
-        showExplanation(q.explanation);
-      }
+  showExplanation(q.explanation);
+}
 
-      function showExplanation(text) {
-        const box = document.getElementById("explanation-box");
-        document.getElementById("explanation-text").textContent = text;
-        box.classList.remove("hidden");
-        const nextBtn = document.getElementById("next-btn");
-        nextBtn.classList.add("visible");
-        nextBtn.textContent =
-          currentQ < questions.length - 1 ? "ข้อถัดไป →" : "ดูผลคะแนน →";
-      }
+function showExplanation(text) {
+  const box = document.getElementById('explanation-box');
+  document.getElementById('explanation-text').textContent = text;
+  box.classList.remove('hidden');
+  const nextBtn = document.getElementById('next-btn');
+  nextBtn.classList.add('visible');
+  nextBtn.textContent = currentQ < questions.length - 1 ? 'ข้อถัดไป →' : 'ดูผลคะแนน →';
+}
 
-      document.getElementById("next-btn").addEventListener("click", () => {
-        currentQ++;
-        if (currentQ < questions.length) {
-          renderQuestion();
-        } else {
-          showResult();
-        }
-      });
+document.getElementById('next-btn').addEventListener('click', () => {
+  currentQ++;
+  if (currentQ < questions.length) {
+    renderQuestion();
+  } else {
+    showResult();
+  }
+});
 
-      // --- RESULT ---
-      function showResult() {
-        const total = questions.length;
-        const avg = total > 0 ? Math.round(totalTime / total) : 0;
-        const pct = Math.round((score / total) * 100);
+// --- RESULT ---
+function showResult() {
+  const total = questions.length;
+  const avg = total > 0 ? Math.round(totalTime / total) : 0;
+  const pct = Math.round((score / total) * 100);
 
-        document.getElementById("result-score").textContent = score;
-        document.getElementById("result-total").textContent = `/${total}`;
-        document.getElementById("r-correct").textContent = score;
-        document.getElementById("r-wrong").textContent = wrongCount;
-        document.getElementById("r-time").textContent = avg + "s";
-        document.getElementById("r-pct").textContent = pct + "%";
+  document.getElementById('result-score').textContent = score;
+  document.getElementById('result-total').textContent = `/${total}`;
+  document.getElementById('r-correct').textContent = score;
+  document.getElementById('r-wrong').textContent = wrongCount;
+  document.getElementById('r-time').textContent = avg + 's';
+  document.getElementById('r-pct').textContent = pct + '%';
 
-        let title, sub;
-        if (pct === 100) {
-          title = "🏆 เพอร์เฟกต์!";
-          sub = "คุณตอบถูกทุกข้อ เก่งมากเลย!";
-        } else if (pct >= 80) {
-          title = "🎉 เยี่ยมมาก!";
-          sub = `คุณตอบถูก ${score} จาก ${total} ข้อ`;
-        } else if (pct >= 60) {
-          title = "👍 ทำได้ดี!";
-          sub = `คุณตอบถูก ${score} จาก ${total} ข้อ`;
-        } else if (pct >= 40) {
-          title = "📚 พอใช้ได้";
-          sub = `ลองทบทวนแล้วเล่นใหม่นะ`;
-        } else {
-          title = "💪 ฝึกต่อไป!";
-          sub = `ยังมีโอกาสพัฒนาได้อีกเยอะ`;
-        }
+  let title, sub;
+  if (pct === 100) { title = '🏆 เพอร์เฟกต์!'; sub = 'คุณตอบถูกทุกข้อ เก่งมากเลย!'; }
+  else if (pct >= 80) { title = '🎉 เยี่ยมมาก!'; sub = `คุณตอบถูก ${score} จาก ${total} ข้อ`; }
+  else if (pct >= 60) { title = '👍 ทำได้ดี!'; sub = `คุณตอบถูก ${score} จาก ${total} ข้อ`; }
+  else if (pct >= 40) { title = '📚 พอใช้ได้'; sub = `ลองทบทวนแล้วเล่นใหม่นะ`; }
+  else { title = '💪 ฝึกต่อไป!'; sub = `ยังมีโอกาสพัฒนาได้อีกเยอะ`; }
 
-        document.getElementById("result-title").textContent = title;
-        document.getElementById("result-sub").textContent = sub;
+  document.getElementById('result-title').textContent = title;
+  document.getElementById('result-sub').textContent = sub;
 
-        showScreen("screen-result");
-      }
+  showScreen('screen-result');
+}
 
-      document
-        .getElementById("retry-same-btn")
-        .addEventListener("click", () => {
-          showScreen("screen-loading");
-          document.getElementById("home-error").style.display = "none";
-          startGame();
-        });
+document.getElementById('retry-same-btn').addEventListener('click', () => {
+  showScreen('screen-loading');
+  document.getElementById('home-error').style.display = 'none';
+  startGame();
+});
 
-      document.getElementById("retry-new-btn").addEventListener("click", () => {
-        selectedCat = null;
-        document
-          .querySelectorAll(".cat-card")
-          .forEach((x) => x.classList.remove("selected"));
-        updateStartBtn();
-        showScreen("screen-home");
-      });
-    </script>
-  </body>
+document.getElementById('retry-new-btn').addEventListener('click', () => {
+  selectedCat = null;
+  document.querySelectorAll('.cat-card').forEach(x => x.classList.remove('selected'));
+  updateStartBtn();
+  showScreen('screen-home');
+});
+</script>
+</body>
 </html>
