@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ควิซไทย — ทดสอบความรู้กับ AI</title>
+  <title>ควิซไทย — ควิซโดย AI</title>
   <link
     href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&family=Mitr:wght@300;400;500;600&display=swap"
     rel="stylesheet" />
@@ -621,17 +621,20 @@
     <!-- SCREEN: HOME -->
     <div id="screen-home" class="screen active">
       <div class="logo">ควิซ<span>ไทย</span> 🇹🇭</div>
-      <p class="tagline">ทดสอบความรู้กับ AI — ข้อสอบโดย AI</p>
+      <p class="tagline">ทดสอบความรู้กับ AI — คำถามถูกคิดค้นโดย AI</p>
 
       <div class="api-banner">
         <span class="api-banner-icon">🔑</span>
         <div class="api-banner-text">
           <strong>ใส่ Google Gemini API Key</strong> เพื่อให้ AI ออกคำถามได้
-          (ฟรี 1,500 req/วัน)<br />
+          (ฟรี 1,500 req/วัน)
           สมัครได้ที่
           <a href="https://aistudio.google.com/apikey" target="_blank"
-            style="color: var(--accent)">aistudio.google.com</a>
-          · Key ใช้แค่ใน browser ของคุณ ไม่ถูกเก็บที่ไหน
+            style="color: var(--accent)">aistudio.google.com</a><br />
+          Key ใช้แค่ใน Browser ของคุณ ไม่ถูกเก็บที่ไหน API Key ถือเป็นข้อมูลความลับห้ามเปิดเผยให้ผู้อื่นเด็ดขาด<br />
+          <strong>ผู้พัฒนาของสงวนสิทธิ์ในการรับผิดชอบหาก API
+            Key ถูกเปิดเผยและเกิดค่าใช้จ่ายเกิดขี้น
+          </strong><br />
           <input class="api-key-input" id="api-key-input" type="password" placeholder="วาง API Key ที่นี่..." />
         </div>
       </div>
@@ -831,7 +834,7 @@
       try {
         const ai = new GoogleGenAI({ apiKey: apiKey });
         const response = await ai.models.generateContent({
-          model: "gemini-3.5-flash",
+          model: "gemini-2.5-flash",
           contents: prompt,
         });
 
