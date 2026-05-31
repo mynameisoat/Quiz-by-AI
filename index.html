@@ -621,7 +621,7 @@
     <!-- SCREEN: HOME -->
     <div id="screen-home" class="screen active">
       <div class="logo">ควิซ<span>ไทย</span> 🇹🇭</div>
-      <p class="tagline">ทดสอบความรู้กับ AI — ออกข้อสอบใหม่ทุกครั้ง</p>
+      <p class="tagline">ทดสอบความรู้กับ AI — ข้อสอบโดย AI</p>
 
       <div class="api-banner">
         <span class="api-banner-icon">🔑</span>
@@ -838,11 +838,11 @@
         const raw = response.text.trim();
         const jsonStart = raw.indexOf("{");
         const jsonEnd = raw.lastIndexOf("}");
-        
+
         if (jsonStart === -1 || jsonEnd === -1) {
           throw new Error("เซิร์ฟเวอร์ AI ขัดข้องชั่วคราว กรุณาลองใหม่ภายหลัง");
         }
-        
+
         const parsed = JSON.parse(raw.slice(jsonStart, jsonEnd + 1));
         questions = parsed.questions;
         currentQ = 0;
