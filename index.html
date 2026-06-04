@@ -787,7 +787,7 @@
     function updateStartBtn() {
       const key = apiInput.value.trim();
       document.getElementById("start-btn").disabled = !(
-        selectedCat && key.length > 30
+        selectedCat && key.startsWith("AQ") && key.length > 50
       );
     }
 
